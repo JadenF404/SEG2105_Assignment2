@@ -71,7 +71,13 @@ public class ChatClient extends AbstractClient
   {
     try
     {
-      sendToServer(message);
+      if (message.startsWith("#")){
+    	  handleCommand(message);
+    	  
+      } else {
+		  sendToServer(message);
+      }
+    		  
     }
     catch(IOException e)
     {
@@ -79,6 +85,27 @@ public class ChatClient extends AbstractClient
         ("Could not send message to server.  Terminating client.");
       quit();
     }
+  }
+  
+  private void handleCommand(String message) throws IOException {
+	  if (message.equals("#quit")) {
+		  quit();
+	  } else if (message.equals("logoff")) {
+		  closeConnection();
+		  
+	  } else if (message.equals("sethost")) {
+		  
+	  } else if (message.equals("setport")) {
+		  
+	  } else if (message.equals("login")) {
+		  
+	  } else if (message.equals("gethost")) {
+		  
+	  } else if (message.equals("getport")) {
+		  
+	  } else {
+	      clientUI.display("Invalid Command");
+	  }
   }
   
   /**
@@ -93,5 +120,26 @@ public class ChatClient extends AbstractClient
     catch(IOException e) {}
     System.exit(0);
   }
+  
+	/**
+	 * Method called each time an exception is thrown by the client's
+	 * thread that is waiting for messages from the server.
+	 * 
+	 * @param exception
+	 *            the exception raised.
+	 */
+  @Override
+	protected void connectionException(Exception exception) {
+	  clientUI.display("The server has shut down");
+	  quit();
+	}
+  
+	/**
+	 * Method called after the connection has been closed. The default
+	 * implementation does nothing. 
+	 */
+	protected void connectionClosed() {
+		clientUI.display("Connection closed");
+	}
 }
 //End of ChatClient class
