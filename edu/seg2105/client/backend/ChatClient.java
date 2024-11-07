@@ -116,7 +116,7 @@ public class ChatClient extends AbstractClient
 			  
 			  //Check if port inputted as part of command 
 			  if ((portStart > 0) && (portEnd > 0)) {
-				  setHost(message.substring(portStart, portEnd));
+				  setPort(message.substring(portStart, portEnd));
 			  } else {
 				  clientUI.display("ERROR Invalid format, Follow #setPost<12345>");
 			  }

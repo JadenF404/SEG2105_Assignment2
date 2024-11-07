@@ -22,6 +22,7 @@ public class EchoServer extends AbstractServer
 {
 	//Instance variables
 	ChatIF serverUI;
+	boolean isOpen = false;
 	
   //Class variables *************************************************
   
@@ -41,6 +42,7 @@ public class EchoServer extends AbstractServer
   {
     super(port);
     this.serverUI = serverUI;
+    isOpen = true;
     
   }
 
@@ -76,8 +78,9 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStarted()
   {
+	  isOpen = true;
     System.out.println
-      ("Server listening for connections on port " + getPort());
+      ("Server listening for connections on port " + getPort()); 
   }
   
   /**
@@ -86,6 +89,7 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStopped()
   {
+	  isOpen = false;
     System.out.println
       ("Server has stopped listening for connections.");
   }
@@ -124,7 +128,17 @@ public class EchoServer extends AbstractServer
 			this.close();
 
 		} else if (msg.startsWith("#setport")) {
-			
+			if(!isOpen) {
+				int start = msg.indexOf("<") + 1;
+				int end = msg.indexOf(">");
+				
+				//Check if host inputted as part of command 
+				  if ((start > 0) && (host > 0)) {
+					  setPort(msg.substring(start, end));
+				  } else {
+					  serverUI.display("ERROR Invalid format, Follow #setHost<12345>");
+				  }
+			}
 			
 		} else if (msg.equals("#start")) {
 			
