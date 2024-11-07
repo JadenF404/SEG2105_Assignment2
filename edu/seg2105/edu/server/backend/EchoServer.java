@@ -60,7 +60,7 @@ public class EchoServer extends AbstractServer
     this.sendToAllClients(msg);
   }
   
-  public void handleMessageFromServer (String msg) {
+  public void handleMessageFromServer (String msg) throws IOException {
 	  if (msg.startsWith("#")) {
 		  handleCommand(msg);
 	  } else {
@@ -112,8 +112,27 @@ public class EchoServer extends AbstractServer
 		System.out.println("Client " + client + " disconnected");
 	}
   
-	private void handleCommand(String msg){
-		
+	private void handleCommand(String msg) throws IOException{
+		if (msg.equals("#quit")) {
+			this.close();
+			System.exit(0);
+			
+		} else if (msg.equals("#stop")) {
+			this.stopListening();
+			
+		} else if (msg.equals("#close")) {
+			this.close();
+
+		} else if (msg.startsWith("#setport")) {
+			
+			
+		} else if (msg.equals("#start")) {
+			
+		} else if (msg.equals("#getport")) {
+			
+		} else {
+			
+		}
 	}
   
   //Class methods ***************************************************
