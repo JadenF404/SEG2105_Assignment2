@@ -133,19 +133,23 @@ public class EchoServer extends AbstractServer
 				int end = msg.indexOf(">");
 				
 				//Check if host inputted as part of command 
-				  if ((start > 0) && (host > 0)) {
-					  setPort(msg.substring(start, end));
+				  if ((start > 0) && (end > 0) && (start < end)) {
+					  int port = Integer.parseInt(msg.substring(start, end));
+					  setPort(port);
+					  System.out.println("Port set to " + port);
+
 				  } else {
-					  serverUI.display("ERROR Invalid format, Follow #setHost<12345>");
+					  System.out.println("ERROR Invalid format, Follow #setPort<12345>");
 				  }
 			}
 			
 		} else if (msg.equals("#start")) {
+			this.listen();
 			
 		} else if (msg.equals("#getport")) {
-			
+			System.out.println(Integer.toString(getPort()));
 		} else {
-			
+			System.out.println("ERROR: Invalid Command");
 		}
 	}
   

@@ -100,8 +100,11 @@ public class ChatClient extends AbstractClient
 			  int hostEnd = message.indexOf(">");
 			  
 			  //Check if host inputted as part of command 
-			  if ((hostStart > 0) && (hostEnd > 0)) {
-				  setHost(message.substring(hostStart, hostEnd));
+			  if ((hostStart > 0) && (hostEnd > 0) && (hostStart < hostEnd)) {
+				  String host = message.substring(hostStart, hostEnd); 
+				  setHost(host);
+				  clientUI.display("Host set to " + host);
+
 			  } else {
 				  clientUI.display("ERROR Invalid format, Follow #setHost<12345>");
 			  }
@@ -115,8 +118,11 @@ public class ChatClient extends AbstractClient
 			  int portEnd = message.indexOf(">");
 			  
 			  //Check if port inputted as part of command 
-			  if ((portStart > 0) && (portEnd > 0)) {
-				  setPort(message.substring(portStart, portEnd));
+			  if ((portStart > 0) && (portEnd > 0) && (portStart < portEnd)) {
+				  int port = Integer.parseInt(message.substring(portStart, portEnd));
+				  setPort(port);
+				  clientUI.display("Port set to " + port);
+
 			  } else {
 				  clientUI.display("ERROR Invalid format, Follow #setPost<12345>");
 			  }
