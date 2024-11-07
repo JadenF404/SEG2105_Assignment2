@@ -25,7 +25,11 @@ public class EchoServer extends AbstractServer
 	boolean isOpen = false;
 	
   //Class variables *************************************************
-  
+	  /**
+	   * The loginKey that each client's login ID is stored under.
+	   */
+	String loginKey = "loginID";
+	
   /**
    * The default port to listen on.
    */
@@ -59,7 +63,34 @@ public class EchoServer extends AbstractServer
     (Object msg, ConnectionToClient client)
   {
     System.out.println("Message received: " + msg + " from " + client);
-    this.sendToAllClients(msg);
+	String loginID = (String) client.getInfo(loginKey);
+
+    try {
+        
+        String msgStr = (String) msg;
+        if(msgStr.startsWith("#login")) {
+        	if (loginID != null) {
+        		client.sendToClient("ERROR: You are already logged in: Disconnecting...");
+        		client.close();
+        		return;
+        	}
+        	loginID = msgStr.substring(7);
+        	
+        	if (loginID.isEmpty()) {
+        		client.sendToClient("ERROR: Login ID cannot be empty. Disconnecting...");
+        		client.close();
+        		return;
+        	}
+        	
+        	client.setInfo(loginKey, loginID);
+        	
+        } else {
+            this.sendToAllClients(client.getInfo(loginKey) + ": " + msg);
+        }
+    } catch (IOException e) {
+        serverUI.display("Error handling client message: " + e.getMessage());
+    }
+    
   }
   
   public void handleMessageFromServer (String msg) throws IOException {
@@ -71,6 +102,7 @@ public class EchoServer extends AbstractServer
 	  }
 
   }
+  
     
   /**
    * This method overrides the one in the superclass.  Called

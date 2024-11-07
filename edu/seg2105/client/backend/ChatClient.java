@@ -27,6 +27,11 @@ public class ChatClient extends AbstractClient
    * the display method in the client.
    */
   ChatIF clientUI; 
+  
+  /**
+   * The client's login ID
+   */
+  private String loginID;
 
   
   //Constructors ****************************************************
@@ -39,11 +44,12 @@ public class ChatClient extends AbstractClient
    * @param clientUI The interface type variable.
    */
   
-  public ChatClient(String host, int port, ChatIF clientUI) 
+  public ChatClient(String loginID, String host, int port, ChatIF clientUI) 
     throws IOException 
   {
     super(host, port); //Call the superclass constructor
     this.clientUI = clientUI;
+    this.loginID = loginID;
     openConnection();
   }
 
@@ -144,6 +150,19 @@ public class ChatClient extends AbstractClient
 	  } else {
 	      clientUI.display("ERROR: Invalid Command");
 	  }
+  }
+  
+  /**
+   * Method called after the connection has been established.
+   * It sends the login message to the server.
+   */
+  @Override
+  protected void connectionEstablished() {
+    try {
+      sendToServer("#login " + loginID);
+    } catch (IOException e) {
+      clientUI.display("ERROR: Failed to send login ID to server.");
+    }
   }
   
   /**

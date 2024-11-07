@@ -27,6 +27,12 @@ public class ClientConsole implements ChatIF
    */
   final public static int DEFAULT_PORT = 5555;
   
+  /**
+   * The loginKey that each client's login ID is stored under.
+   */
+  String loginKey = "loginID";
+
+  
   //Instance variables **********************************************
   
   /**
@@ -50,12 +56,11 @@ public class ClientConsole implements ChatIF
    * @param host The host to connect to.
    * @param port The port to connect on.
    */
-  public ClientConsole(String host, int port) 
+  public ClientConsole(String loginID, String host, int port) 
   {
     try 
     {
-      client= new ChatClient(host, port, this);
-      
+      client= new ChatClient(loginID, host, port, this);
       
     } 
     catch(IOException exception) 
@@ -121,23 +126,29 @@ public class ClientConsole implements ChatIF
    */
   public static void main(String[] args) 
   {
+	String loginid  = "";
     String host = "";
     int port = 0;
 
     try
     {
-      host = args[0];
-      port = Integer.parseInt(args[1]);
+      loginid = args[0];
+      host = args[1];
+      port = Integer.parseInt(args[2]);
     }
     catch(ArrayIndexOutOfBoundsException e)
     {
+    	if (loginid.isEmpty()) {
+            System.out.println("ERROR: Login ID is mandatory.");
+            System.exit(1);
+    	}
       host = "localhost";
       port = DEFAULT_PORT;
     }
     catch(NumberFormatException ne) {
     	port = DEFAULT_PORT;
     }
-    ClientConsole chat= new ClientConsole(host, port);
+    ClientConsole chat= new ClientConsole(loginid, host, port);
     chat.accept();  //Wait for console data
   }
 }
