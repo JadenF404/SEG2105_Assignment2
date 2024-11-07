@@ -90,19 +90,51 @@ public class ChatClient extends AbstractClient
   private void handleCommand(String message) throws IOException {
 	  if (message.equals("#quit")) {
 		  quit();
-	  } else if (message.equals("logoff")) {
+		  
+	  } else if (message.equals("#logoff")) {
 		  closeConnection();
 		  
-	  } else if (message.equals("sethost")) {
+	  } else if (message.equals("#sethost")) {
+		  if (!isConnected()) {
+			  int hostStart = message.indexOf("<") + 1;
+			  int hostEnd = message.indexOf(">");
+			  
+			  //Check if host inputted as part of command 
+			  if ((hostStart > 0) && (hostEnd > 0)) {
+				  setHost(message.substring(hostStart, hostEnd));
+			  } else {
+				  System.out.println("Invalid format, Follow #setHost<12345>");
+			  }
+		  } else {
+			  System.out.println("Cannot change host while connected");
+		  }
 		  
-	  } else if (message.equals("setport")) {
+	  } else if (message.equals("#setport")) {
+		  if (!isConnected()) {
+			  int portStart = message.indexOf("<") + 1;
+			  int portEnd = message.indexOf(">");
+			  
+			  //Check if port inputted as part of command 
+			  if ((portStart > 0) && (portEnd > 0)) {
+				  setHost(message.substring(portStart, portEnd));
+			  } else {
+				  System.out.println("Invalid format, Follow #setPost<12345>");
+			  }
+		  } else {
+			  System.out.println("Cannot change post while connected");
+		  }
 		  
-	  } else if (message.equals("login")) {
+	  } else if (message.equals("#login")) {
+		  if (!isConnected()) {
+			  openConnection();
+		  } else {
+			  System.out.println("Client already logged in");
+		  }
 		  
-	  } else if (message.equals("gethost")) {
-		  
-	  } else if (message.equals("getport")) {
-		  
+	  } else if (message.equals("#gethost")) {
+		  System.out.print(getHost());
+	  } else if (message.equals("#getport")) {
+		  System.out.print(getPort());
 	  } else {
 	      clientUI.display("Invalid Command");
 	  }

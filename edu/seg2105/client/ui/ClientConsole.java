@@ -84,7 +84,7 @@ public class ClientConsole implements ChatIF
       String message;
 
       while (true) 
-      {
+      {		
         message = fromConsole.nextLine();
         client.handleMessageFromClientUI(message);
       }
