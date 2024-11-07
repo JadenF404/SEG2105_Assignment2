@@ -65,6 +65,7 @@ public class EchoServer extends AbstractServer
 		  handleCommand(msg);
 	  } else {
 		  serverUI.display(msg.toString());
+		  this.sendToAllClients("SERVER MSG> " + msg);
 	  }
 
   }
