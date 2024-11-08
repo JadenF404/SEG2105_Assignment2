@@ -62,8 +62,8 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient
     (Object msg, ConnectionToClient client)
   {
-    System.out.println("Message received: " + msg + " from " + client);
 	String loginID = (String) client.getInfo(loginKey);
+    System.out.println("Message received: " + msg + " from " + loginID);
 
     try {
         
@@ -81,8 +81,9 @@ public class EchoServer extends AbstractServer
         		client.close();
         		return;
         	}
-        	
+    		this.sendToAllClients(loginID + " has logged on.");
         	client.setInfo(loginKey, loginID);
+        	System.out.println(loginID + " has logged on.");
         	
         } else {
             this.sendToAllClients(client.getInfo(loginKey) + ": " + msg);
@@ -133,7 +134,7 @@ public class EchoServer extends AbstractServer
 	 */
   @Override
 	protected void clientConnected(ConnectionToClient client) {
-		System.out.println("Client " + client + " connected");
+		System.out.println("A new client has connected to the server");
 	}
 
 	/**
